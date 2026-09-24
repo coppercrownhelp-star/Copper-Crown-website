@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copper & Crown | The Royal Standard of Electrical Craftsmanship</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="notification-toast">
+        <i class="fa-solid fa-circle-check"></i> <span id="toast-text">Operation completed.</span>
+    </div>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <div class="brand-logo">
+            <div class="logo-crest">
+                <img src="images/about-us.png" alt="About Copper&Crown" style="width: 20%; height: 25%; border-radius: 100px;margin-left: 35%;">
+            </div>
+            <div class="brand-text-wrapper">
+                <span class="brand-title">COPPER <span class="amp">&</span> CROWN</span>
+                <span class="brand-sub">THE ROYAL STANDARD OF ELECTRICAL CRAFTSMANSHIP</span>
+            </div>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact </a>
+        </nav>
+
+
+   <button class="util-btn" onclick="openModal('trackingModal')">
+                <i class="fa-solid fa-location-crosshairs"></i> <span>Track Status</span>
+            </button>
+
+        <div class="header-utility">
+            <button class="util-btn req-account-btn" id="accountUtilBtn" onclick="openModal('accountModal')">
+                <i class="fa-solid fa-user-lock"></i> <span id="accountBtnText">My Account *</span>
+            </button>
+            
+            
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-section" id="home">
+        <div class="hero-overlay"></div>    
+        <div class="hero-content">
+            <h1 class="hero-title">COPPER <span class="hero-amp">&</span> CROWN</h1>
+            <p class="hero-subtitle">THE ROYAL STANDARD OF ELECTRICAL CRAFTSMANSHIP</p>
+            <p class="hero-description">Reliable electrical supplies and expert electrical services for your home, business, and industrial projects.</p>
+            <div class="hero-btn-group">
+                <button onclick="handleProtectedAction('bookingModal')" class="btn-gold-solid">
+                    <i class="fa-solid fa-calendar-check"></i> <span>Request a Service</span>
+                </button>
+                <a href="#contact" class="btn-gold-outline">
+                    <i class="fa-solid fa-envelope"></i> <span>Contact Us</span>
+                </a>
+            </div>
+        </div>
+        <div class="hero-image-wrap">
+            <img src="images/Hero section.jpg" alt="Electrical Craftsmanship Background" class="hero-bg-img">
+        </div>
+    </section>
+    <!-- About Us Section -->
+<section class="about-section" id="about" style="padding: 130px 20px 130px 20px; background: var(--bg-dark-secondary, #121212); border-top: 1px solid var(--border-dark, #2a2a2a); align-items: center;">
+    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+        <div>
+            <h2 style="font-family: 'Cinzel', serif; color: var(--gold-primary, #d4af37); font-size: 2.2rem; margin-bottom: 20px;">About Copper & Crown</h2>
+            <p style="color: var(--text-muted, #ccc); font-size: 1rem; line-height: 1.8; margin-bottom: 15px;">
+                Copper & Crown represents the gold standard in premium electrical craftsmanship. We specialize in safe, high-end residential, commercial, and industrial electrical installations and maintenance.
+            </p>
+            <p style="color: var(--text-muted, #ccc); font-size: 1rem; line-height: 1.8;">
+                Our team of certified technicians guarantees precision, safety, and long-lasting quality for every project we undertake.
+            </p>
+        </div>
+    
+        <div class="about-image" style="text-align: center;">
+            <img src="images/about-us.png" alt="About Copper & Crown" style="width: 70%; height: 50%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); position: sticky;">    
+    </div>
+</section>
+
+<!-- Services Section -->
+    <section class="services-section" id="services">
+        <div class="services-container">
+            <div class="services-left-content">
+                <h2>Our Services</h2>
+                <p class="section-sub">Professional electrical solutions tailored for every requirement.</p>
+
+                <div class="services-list-grid">
+                    <div class="service-box">
+                        <img src="images/electrical-installation.jpg" alt="Electrical Installation" class="service-img">
+                        <div class="s-icon"><i class="fa-solid fa-plug"></i></div>
+                        <div class="s-text">
+                            <h4>Electrical Installation</h4>
+                            <p>Safe & reliable installations for homes and commercial spaces.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-box">
+                        <img src="images/electrical-repair.jpg" alt="Electrical Repair" class="service-img">
+                        <div class="s-icon"><i class="fa-solid fa-wrench"></i></div>
+                        <div class="s-text">
+                            <h4>Electrical Repair</h4>
+                            <p>Quick, safe, and efficient troubleshooting and repair services.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-box">
+                        <img src="images/fan-repair.jpg" alt="Fan Installation/Repair" class="service-img">
+                        <div class="s-icon"><i class="fa-solid fa-fan"></i></div>
+                        <div class="s-text">
+                            <h4>Fan Installation/Repair</h4>
+                            <p>Keep your indoor environment cool and properly ventilated.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-box">
+                        <img src="images/wiring-work.jpg" alt="Wiring Work" class="service-img">
+                        <div class="s-icon"><i class="fa-solid fa-sitemap"></i></div>
+                        <div class="s-text">
+                            <h4>Wiring Work</h4>
+                            <p>Professional wiring and re-wiring for long-term safety.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-box">
+                        <img src="images/switch-socket.jpg" alt="Switch/Socket Work" class="service-img">
+                        <div class="s-icon"><i class="fa-solid fa-toggle-on"></i></div>
+                        <div class="s-text">
+                            <h4>Switch/Socket Work</h4>
+                            <p>Precision fitting and repairs for all switches and sockets.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-box">
+                        <img src="images/lighting-repair.jpg" alt="Lighting Repair" class="service-img">
+                        <div class="s-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <div class="s-text">
+                            <h4>Lighting Repair</h4>
+                            <p>Brighten your space with modern LED & decorative solutions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="services-cta">
+                    <button onclick="handleProtectedAction('bookingModal')" class="btn-gold-outline">
+                        <i class="fa-solid fa-chevron-right"></i> <span>Request a Service</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Contact Section -->
+    <section class="bottom-section" id="contact">
+        <div class="bottom-grid">
+            <div class="bottom-col">
+                <h3>Get in Touch</h3>
+                <p class="col-sub">Have a question or need emergency service?<br>We are here to assist you.</p>
+                <div class="contact-methods">
+                    <p><i class="fa-solid fa-phone"></i> <a href="tel:03294942684">0329-4942684</a></p>
+                    <p><i class="fa-solid fa-envelope"></i> <a href="mailto:coppercrown.pk@gmail.com">coppercrown.pk@gmail.com</a></p>
+                </div>
+                <div class="contact-btns" style="margin-top:15px;">
+                    <a href="tel:03294942684" class="btn-gold-solid"><i class="fa-solid fa-phone"></i> Call Now</a>
+                </div>
+            </div>
+
+            <div class="bottom-col" style="grid-column: span 2;">
+                <h3>Send Us a Message</h3>
+                <form id="contactForm" onsubmit="handleFormSubmit(event, 'Message sent successfully!')">
+                    <div class="form-row">
+                        <input type="text" class="form-input" required placeholder="Your Name *">
+                        <input type="email" class="form-input" required placeholder="Your Email *">
+                    </div>
+                    <textarea class="form-input" rows="4" required placeholder="Your Message *"></textarea>
+                    <button type="submit" class="btn-gold-solid btn-full"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-bar">
+        <div class="footer-left"><span class="brand-title">COPPER <span class="amp">&</span> CROWN</span></div>
+        <div class="footer-center">
+            <a href="admin.html" style="color: var(--gold-primary); font-weight: 600;"><i class="fa-solid fa-user-shield"></i> Admin Portal</a>
+        </div>
+        <div class="footer-right">
+            <span>0329-4942684</span> | <span>coppercrown.pk@gmail.com</span>
+        </div>
+    </footer>
+
+    <!-- ACCOUNT MODAL (SIGN IN & SEPARATE SIGN UP) -->
+    <div class="modal-overlay" id="accountModal">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal('accountModal')">&times;</span>
+            <div class="modal-badge"><i class="fa-solid fa-lock"></i> Account Access Required</div>
+            
+            <!-- LOGIN VIEW -->
+            <div id="loginView">
+                <h3 class="modal-title">Customer Sign In</h3>
+                <p class="modal-desc">Please enter your registered Email and Password.</p>
+                <form onsubmit="handleAccountLogin(event)">
+                    <input type="email" id="loginEmail" class="form-input" required placeholder="Email Address *">
+                    <input type="password" id="loginPassword" class="form-input" required placeholder="Password *">
+                    <button type="submit" class="btn-gold-solid btn-full">Sign In</button>
+                </form>
+                <div class="account-toggle-hint">
+                    <p>Don't have an account yet? <a href="javascript:void(0)" onclick="switchAccountTab('signup')">Sign Up Here</a></p>
+                </div>
+            </div>
+
+            <!-- SEPARATE SIGNUP VIEW -->
+            <div id="signupView" style="display: none;">
+                <h3 class="modal-title">Create New Account</h3>
+                <p class="modal-desc">Register your account details to request electrical services.</p>
+                <form onsubmit="handleAccountSignup(event)">
+                    <input type="text" id="signupName" class="form-input" required placeholder="Full Name *">
+                    <input type="email" id="signupEmail" class="form-input" required placeholder="Email Address *">
+                    <input type="password" id="signupPassword" class="form-input" required placeholder="Create Password *">
+                    <button type="submit" class="btn-gold-solid btn-full">Create Account & Sign In</button>
+                </form>
+                <div class="account-toggle-hint">
+                    <p>Already registered? <a href="javascript:void(0)" onclick="switchAccountTab('login')">Sign In Here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOOKING MODAL -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal('bookingModal')">&times;</span>
+            <h3 class="modal-title">Book Electrical Service</h3>
+            <p class="modal-desc">Schedule an expert technician. Details will be delivered directly via WhatsApp.</p>
+            
+            <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+                <input type="text" id="bookingName" class="form-input" required placeholder="Full Name *">
+                <input type="tel" id="bookingPhone" class="form-input" required placeholder="Phone Number *">
+                <select id="bookingService" class="form-input" required>
+                    <option value="">Select Electrical Service...</option>
+                    <option value="Electrical Installation">Electrical Installation</option>
+                    <option value="Electrical Repair">Electrical Repair</option>
+                    <option value="Fan Installation/Repair">Fan Installation / Repair</option>
+                    <option value="Wiring Work">Wiring Work</option>
+                    <option value="Switch/Socket Work">Switch / Socket Work</option>
+                    <option value="Lighting Repair">Lighting Repair</option>
+                </select>
+                <div class="form-row">
+                    <input type="date" id="bookingDate" class="form-input" required>
+                    <input type="time" id="bookingTime" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-gold-solid btn-full"><i class="fa-brands fa-whatsapp"></i> Confirm & Send via WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TRACKING MODAL -->
+    <div class="modal-overlay" id="trackingModal">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal('trackingModal')">&times;</span>
+            <h3 class="modal-title">Track Service Request</h3>
+            <p class="modal-desc">Enter your Request ID (e.g., CC-1082) to inspect progress.</p>
+            <form onsubmit="event.preventDefault(); trackRequest();">
+                <input type="text" id="trackingIdInput" class="form-input" required placeholder="Request ID *">
+                <button type="submit" class="btn-gold-solid btn-full">Check Status</button>
+            </form>
+            <div id="trackingResult" class="tracking-result-box">
+                <p style="color: var(--gold-primary);"><strong>Status:</strong> <span id="trackStatus">Technician Assigned</span></p>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 5px;">Service: <span id="trackService">Electrical Audit</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating WhatsApp Widget -->
+    <a href="https://wa.me/923294942684" target="_blank" class="floating-widget whatsapp-btn" title="WhatsApp Support">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <script src="js/app.js"></script>
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<!-- Your Custom JS -->
+<script src="js/app.js"></script>
+<!-- Include this at the bottom of index.html and admin.html -->
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
