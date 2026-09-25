@@ -157,7 +157,7 @@ function resetUserHeaderUI() {
     const btnText = document.getElementById('accountBtnText');
     const utilBtn = document.getElementById('accountUtilBtn');
     if (btnText) {
-        btnText.innerText = "My Account *";
+        btnText.innerText = "My Account*";
         if (utilBtn) utilBtn.style.borderColor = "var(--border-dark)";
     }
 }
@@ -359,3 +359,242 @@ function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
     navLinks.classList.toggle('active');
 }
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // ------------------------------------------
+    // 1. Back to Top Button Logic
+    // ------------------------------------------
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    if (backToTopBtn) {
+        // Toggle button visibility based on scroll distance
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        // Smooth scroll to top on click
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // ------------------------------------------
+    // 2. Interactive Particles.js Configuration
+    // ------------------------------------------
+    if (typeof particlesJS !== 'undefined' && document.getElementById('particles-js')) {
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 55,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#d4af37" // Royal Gold Particles
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.4,
+                    "random": true
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 140,
+                    "color": "#d4af37", // Gold Connecting Lines
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1.8,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab" // Interactive connection on mouse hover
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 180,
+                        "line_linked": {
+                            "opacity": 0.6
+                        }
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const tiltCards = document.querySelectorAll('.service-box, .shine-card');
+
+    tiltCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left; // Mouse X position inside card
+            const y = e.clientY - rect.top;  // Mouse Y position inside card
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Calculate tilt angle (-8deg to +8deg max)
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+            card.style.transition = 'transform 0.1s ease-out';
+        });
+
+        // Reset transform when mouse leaves
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            card.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+
+    if (!dot || !ring || window.innerWidth < 992) return;
+
+    let mouseX = 0, mouseY = 0;
+    let ringX = 0, ringY = 0;
+
+    // Track mouse position
+    window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        // Position core dot immediately
+        dot.style.left = `${mouseX}px`;
+        dot.style.top = `${mouseY}px`;
+    });
+
+    // Smooth inertia loop for outer ring
+    function renderCursor() {
+        // Interpolate position (0.15 controls lag smoothness)
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+
+        ring.style.left = `${ringX}px`;
+        ring.style.top = `${ringY}px`;
+
+        requestAnimationFrame(renderCursor);
+    }
+    renderCursor();
+
+    // Expand cursor when hovering over interactive elements
+    const targets = document.querySelectorAll('a, button, .service-box, .shine-card, .btn-gold-solid, .btn-gold-outline');
+    targets.forEach(target => {
+        target.addEventListener('mouseenter', () => {
+            ring.classList.add('hovered');
+            dot.classList.add('hovered');
+        });
+
+        target.addEventListener('mouseleave', () => {
+            ring.classList.remove('hovered');
+            dot.classList.remove('hovered');
+        });
+    });
+});
+// Web Audio API UI Sound Synthesizer
+const UISounds = (() => {
+    let audioCtx = null;
+
+    // Initialize AudioContext on first user interaction (browser policy compliance)
+    function initContext() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    }
+
+    // High-pitched subtle pop for button clicks
+    function playClickSound() {
+        initContext();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        // Pitch drop from 800Hz to 200Hz creates a satisfying tactile "click"
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.04);
+
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime); // Soft volume
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+    }
+
+    // Soft tone for hover states
+    function playHoverSound() {
+        initContext();
+        if (!audioCtx) return;
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.02, audioCtx.currentTime); // Very faint
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.03);
+    }
+
+    return { playClickSound, playHoverSound };
+})();
+
+// Attach sounds to all buttons and interactive elements
+document.addEventListener('DOMContentLoaded', () => {
+    const interactiveElements = document.querySelectorAll('button, .btn-gold-solid, .btn-gold-outline, .nav-link');
+
+    interactiveElements.forEach(el => {
+        el.addEventListener('click', () => UISounds.playClickSound());
+        el.addEventListener('mouseenter', () => UISounds.playHoverSound());
+    });
+});
