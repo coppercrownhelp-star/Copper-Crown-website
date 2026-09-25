@@ -355,3 +355,7 @@ window.handleFormSubmit = function(e, msg) {
     showToast(msg);
     e.target.reset();
 };
+function toggleMobileMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    navLinks.classList.toggle('active');
+}
