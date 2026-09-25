@@ -47,8 +47,11 @@
                 <i class="fa-solid fa-user-lock"></i> <span id="accountBtnText">My Account *</span>
             </button>
             
-            
         </div>
+        <!-- Hamburger Menu Toggle Button for Mobile -->
+<button class="mobile-menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+    <i class="fa-solid fa-bars"></i>
+</button>
     </header>
 
     <!-- Hero Banner -->
@@ -72,8 +75,8 @@
         </div>
     </section>
     <!-- About Us Section -->
-<section class="about-section" id="about" style="padding: 130px 20px 130px 20px; background: var(--bg-dark-secondary, #121212); border-top: 1px solid var(--border-dark, #2a2a2a); align-items: center;">
-    <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+<section class="about-section" id="about">
+    <div class="about-container">
         <div>
             <h2 style="font-family: 'Cinzel', serif; color: var(--gold-primary, #d4af37); font-size: 2.2rem; margin-bottom: 20px;">About Copper & Crown</h2>
             <p style="color: var(--text-muted, #ccc); font-size: 1rem; line-height: 1.8; margin-bottom: 15px;">
@@ -183,7 +186,7 @@
                         <input type="text" class="form-input" required placeholder="Your Name *">
                         <input type="email" class="form-input" required placeholder="Your Email *">
                     </div>
-                    <textarea class="form-input" rows="7" required placeholder="Your Message *"></textarea>
+                    <textarea class="form-input" rows="12" required placeholder="Your Message *"></textarea>
                     <button type="submit" class="btn-gold-solid btn-full"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
                 </form>
             </div>
