@@ -9,9 +9,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation CSS -->
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Custom Magnetic Cursor Elements -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<!-- Interactive Button with Glowing Border -->
+<a href="#services" class="btn-micro-glow">
+    <i class="fa-solid fa-bolt"></i> Explore Services
+</a>
 
     <!-- Toast Notification -->
     <div id="toast" class="notification-toast">
@@ -44,7 +53,7 @@
 
         <div class="header-utility">
             <button class="util-btn req-account-btn" id="accountUtilBtn" onclick="openModal('accountModal')">
-                <i class="fa-solid fa-user-lock"></i> <span id="accountBtnText">My Account *</span>
+                <i class="fa-solid fa-user-lock"></i> <span id="accountBtnText">My Account*</span>
             </button>
             
         </div>
@@ -55,79 +64,107 @@
     </header>
 
     <!-- Hero Banner -->
-    <section class="hero-section" id="home">
-        <div class="hero-overlay"></div>    
-        <div class="hero-content">
-            <h1 class="hero-title">COPPER <span class="hero-amp">&</span> CROWN</h1>
-            <p class="hero-subtitle">THE ROYAL STANDARD OF ELECTRICAL CRAFTSMANSHIP</p>
-            <p class="hero-description">Reliable electrical supplies and expert electrical services for your home, business, and industrial projects.</p>
-            <div class="hero-btn-group">
-                <button onclick="handleProtectedAction('bookingModal')" class="btn-gold-solid">
-                    <i class="fa-solid fa-calendar-check"></i> <span>Request a Service</span>
-                </button>
-                <a href="#contact" class="btn-gold-outline">
-                    <i class="fa-solid fa-envelope"></i> <span>Contact Us</span>
-                </a>
-            </div>
-        </div>
-        <div class="hero-image-wrap">
-            <img src="images/Hero section.jpg" alt="Electrical Craftsmanship Background" class="hero-bg-img">
-        </div>
-    </section>
-    <!-- About Us Section -->
-<section class="about-section" id="about">
-    <div class="about-container">
-        <div>
-            <h2 style="font-family: 'Cinzel', serif; color: var(--gold-primary, #d4af37); font-size: 2.2rem; margin-bottom: 20px;">About Copper & Crown</h2>
-            <p style="color: var(--text-muted, #ccc); font-size: 1rem; line-height: 1.8; margin-bottom: 15px;">
-                Copper & Crown represents the gold standard in premium electrical craftsmanship. We specialize in safe, high-end residential, commercial, and industrial electrical installations and maintenance.
-            </p>
-            <p style="color: var(--text-muted, #ccc); font-size: 1rem; line-height: 1.8;">
-                Our team of certified technicians guarantees precision, safety, and long-lasting quality for every project we undertake.
-            </p>
-        </div>
+   <!-- Hero Banner with Particle Background -->
+<section class="hero-section" id="home">
+    <!-- Interactive Particle Background Canvas -->
+    <div id="particles-js"></div>
     
-        <div class="about-image" style="text-align: center;">
-            <img src="images/about-us.png" alt="About Copper & Crown" style="width: 70%; height: 50%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); position: sticky;">    
+    <div class="hero-overlay"></div>    
+    <div class="hero-content" data-aos="fade-up">
+        <h1 class="hero-title">COPPER <span class="hero-amp">&</span> CROWN</h1>
+        <p class="hero-subtitle">THE ROYAL STANDARD OF ELECTRICAL CRAFTSMANSHIP</p>
+        <p class="hero-description">Reliable electrical supplies and expert electrical services for your home, business, and industrial projects.</p>
+        <div class="hero-btn-group">
+            <button onclick="handleProtectedAction('bookingModal')" class="btn-gold-solid">
+                <i class="fa-solid fa-calendar-check"></i> <span>Request a Service</span>
+            </button>
+            <a href="#contact" class="btn-gold-outline">
+                <i class="fa-solid fa-envelope"></i> <span>Contact Us</span>
+            </a>
+        </div>
+    </div>
+    <div class="hero-image-wrap">
+        <img src="images/Hero section.jpg" alt="Electrical Craftsmanship Background" class="hero-bg-img">
     </div>
 </section>
 
+<!-- Floating Back to Top Button -->
+<button id="backToTopBtn" title="Back to top" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+    <!-- About Us Section -->
+<section class="about-section" id="about">
+    <div class="about-container">
+        <!-- Content Column -->
+        <div class="about-content">
+            <span class="about-badge">Craftsmanship &amp; Precision</span>
+            <h2 class="about-title">About Copper &amp; Crown</h2>
+            
+            <p class="about-description">
+                Copper &amp; Crown represents the gold standard in premium electrical craftsmanship. We specialize in safe, high-end residential, commercial, and industrial electrical installations and maintenance.
+            </p>
+            
+            <p class="about-description">
+                Our team of certified technicians guarantees precision, safety, and long-lasting quality for every project we undertake.
+            </p>
+
+            <!-- Highlights / Key Points -->
+            <div class="about-stats">
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Certified Safety</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Expert Support</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Frame Column -->
+        <div class="about-image-wrapper">
+            <div class="about-image-card">
+                <img src="images/about-us.png" alt="About Copper & Crown" class="about-img">
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Services Section -->
-    <section class="services-section" id="services">
+  <section class="services-section" id="services">
         <div class="services-container">
             <div class="services-left-content">
                 <h2>Our Services</h2>
                 <p class="section-sub">Professional electrical solutions tailored for every requirement.</p>
 
-                <div class="services-list-grid">
-                    <div class="service-box">
-                        <img src="images/electrical-installation.jpg" alt="Electrical Installation" class="service-img">
-                        <div class="s-icon"><i class="fa-solid fa-plug"></i></div>
-                        <div class="s-text">
-                            <h4>Electrical Installation</h4>
-                            <p>Safe & reliable installations for homes and commercial spaces.</p>
-                        </div>
-                    </div>
+  <div class="services-list-grid">
+    <div class="service-box" data-aos="fade-up" data-aos-delay="100">
+        <img src="images/electrical-installation.jpg" alt="Electrical Installation" class="service-img">
+        <div class="s-icon"><i class="fa-solid fa-plug"></i></div>
+        <div class="s-text">
+            <h4>Electrical Installation</h4>
+            <p>Safe & reliable installations for homes and commercial spaces.</p>
+        </div>
+    </div>
 
-                    <div class="service-box">
-                        <img src="images/electrical-repair.jpg" alt="Electrical Repair" class="service-img">
-                        <div class="s-icon"><i class="fa-solid fa-wrench"></i></div>
-                        <div class="s-text">
-                            <h4>Electrical Repair</h4>
-                            <p>Quick, safe, and efficient troubleshooting and repair services.</p>
-                        </div>
-                    </div>
+    <div class="service-box" data-aos="fade-up" data-aos-delay="200">
+        <img src="images/electrical-repair.jpg" alt="Electrical Repair" class="service-img">
+        <div class="s-icon"><i class="fa-solid fa-wrench"></i></div>
+        <div class="s-text">
+            <h4>Electrical Repair</h4>
+            <p>Quick, safe, and efficient troubleshooting and repair services.</p>
+        </div>
+    </div>
 
-                    <div class="service-box">
-                        <img src="images/fan-repair.jpg" alt="Fan Installation/Repair" class="service-img">
-                        <div class="s-icon"><i class="fa-solid fa-fan"></i></div>
-                        <div class="s-text">
-                            <h4>Fan Installation/Repair</h4>
-                            <p>Keep your indoor environment cool and properly ventilated.</p>
-                        </div>
-                    </div>
+    <div class="service-box" data-aos="fade-up" data-aos-delay="300">
+        <img src="images/fan-repair.jpg" alt="Fan Installation/Repair" class="service-img">
+        <div class="s-icon"><i class="fa-solid fa-fan"></i></div>
+        <div class="s-text">
+            <h4>Fan Installation/Repair</h4>
+            <p>Keep your indoor environment cool and properly ventilated.</p>
+        </div>
+    </div>
 
-                    <div class="service-box">
+     <div class="service-box" data-aos="fade-up" data-aos-delay="300">
                         <img src="images/wiring-work.jpg" alt="Wiring Work" class="service-img">
                         <div class="s-icon"><i class="fa-solid fa-sitemap"></i></div>
                         <div class="s-text">
@@ -136,7 +173,7 @@
                         </div>
                     </div>
 
-                    <div class="service-box">
+                    <div class="service-box" data-aos="fade-up" data-aos-delay="300">
                         <img src="images/switch-socket.jpg" alt="Switch/Socket Work" class="service-img">
                         <div class="s-icon"><i class="fa-solid fa-toggle-on"></i></div>
                         <div class="s-text">
@@ -145,7 +182,7 @@
                         </div>
                     </div>
 
-                    <div class="service-box">
+                    <div class="service-box" data-aos="fade-up" data-aos-delay="300">
                         <img src="images/lighting-repair.jpg" alt="Lighting Repair" class="service-img">
                         <div class="s-icon"><i class="fa-solid fa-lightbulb"></i></div>
                         <div class="s-text">
@@ -153,17 +190,15 @@
                             <p>Brighten your space with modern LED & decorative solutions.</p>
                         </div>
                     </div>
-                </div>
 
-                <div class="services-cta">
-                    <button onclick="handleProtectedAction('bookingModal')" class="btn-gold-outline">
+                   <div class="services-cta">
+                    <button onclick="handleProtectedAction('bookingModal')" class="btn-gold-solid">
                         <i class="fa-solid fa-chevron-right"></i> <span>Request a Service</span>
                     </button>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- Bottom Contact Section -->
     <section class="bottom-section" id="contact">
         <div class="bottom-grid">
@@ -202,21 +237,25 @@
         <div class="footer-right">
             <span>0329-4942684</span> | <span>coppercrown.pk@gmail.com</span>
         </div>
+        <!-- Logout Button inside your Header/Nav -->
+<div id="auth-navigation" style="display: none;"><button class="logout-btn" onclick="handleAccountLogout()">
+    Logout
+</button></div>
     </footer>
 
     <!-- ACCOUNT MODAL (SIGN IN & SEPARATE SIGN UP) -->
     <div class="modal-overlay" id="accountModal">
         <div class="modal-card">
             <span class="modal-close" onclick="closeModal('accountModal')">&times;</span>
-            <div class="modal-badge"><i class="fa-solid fa-lock"></i> Account Access Required</div>
+          
             
             <!-- LOGIN VIEW -->
             <div id="loginView">
                 <h3 class="modal-title">Customer Sign In</h3>
                 <p class="modal-desc">Please enter your registered Email and Password.</p>
                 <form onsubmit="handleAccountLogin(event)">
-                    <input type="email" id="loginEmail" class="form-input" required placeholder="Email Address *">
-                    <input type="password" id="loginPassword" class="form-input" required placeholder="Password *">
+                    <input type="email" id="loginEmail" class="form-input" placeholder="Email Address">
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Password">
                     <button type="submit" class="btn-gold-solid btn-full">Sign In</button>
                 </form>
                 <div class="account-toggle-hint">
@@ -229,9 +268,9 @@
                 <h3 class="modal-title">Create New Account</h3>
                 <p class="modal-desc">Register your account details to request electrical services.</p>
                 <form onsubmit="handleAccountSignup(event)">
-                    <input type="text" id="signupName" class="form-input" required placeholder="Full Name *">
-                    <input type="email" id="signupEmail" class="form-input" required placeholder="Email Address *">
-                    <input type="password" id="signupPassword" class="form-input" required placeholder="Create Password *">
+                    <input type="text" id="signupName" class="form-input" placeholder="Full Name *">
+                    <input type="email" id="signupEmail" class="form-input" placeholder="Email Address *">
+                    <input type="password" id="signupPassword" class="form-input" placeholder="Create Password *">
                     <button type="submit" class="btn-gold-solid btn-full">Create Account & Sign In</button>
                 </form>
                 <div class="account-toggle-hint">
@@ -293,13 +332,72 @@
 
     <script src="js/app.js"></script>
     <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDskFzicM7xVyODTqE6217m8oLYMQS-HZY",
+    authDomain: "copper-crown.firebaseapp.com",
+    projectId: "copper-crown",
+    storageBucket: "copper-crown.firebasestorage.app",
+    messagingSenderId: "744460098277",
+    appId: "1:744460098277:web:3de61663acf8123388120c",
+    measurementId: "G-9FSS129KYN"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const auth = getAuth(app);
+
+  // Global Logout Function
+  window.handleAccountLogout = async function() {
+    try {
+      await signOut(auth);
+      window.location.reload(); 
+    } catch (error) {
+      console.error("Logout Error:", error);
+    }
+  };
+
+  // Listen for Authentication State Changes
+  onAuthStateChanged(auth, (user) => {
+    const authBox = document.getElementById("auth-navigation");
+    if (!authBox) return;
+
+    if (user) {
+      // USER IS LOGGED IN -> Show ONLY the Logout Button
+      authBox.innerHTML = `
+        <button class="logout-btn" onclick="handleAccountLogout()">
+          Logout
+        </button>
+      `;
+      authBox.style.display = "block"; // Make container visible
+    } else {
+      // GUEST USER -> Hide the entire container / Show nothing
+      authBox.innerHTML = "";
+      authBox.style.display = "none"; // Hide container completely
+    }
+  });
+</script>
 
 <!-- Your Custom JS -->
 <script src="js/app.js"></script>
 <!-- Include this at the bottom of index.html and admin.html -->
 <script type="module" src="js/app.js"></script>
+<!-- AOS Animation JS -->
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,     // Animation duration in milliseconds
+        easing: 'ease-out-cubic', // Smooth deceleration easing
+        once: true,        // Animation happens only once while scrolling down
+        offset: 100        // Trigger animation 100px before reaching the element
+    });
+</script>
+<!-- Particles.js CDN -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </body>
 </html>
