@@ -31,7 +31,7 @@
     <header class="top-bar">
         <div class="brand-logo">
             <div class="logo-crest">
-                <img src="images/about-us.png" alt="About Copper&Crown" style="width: 90%; height: 45%; border-radius: 100px;">
+                <img src="images/about-us.png" alt="About Copper&Crown" style="width: 90%; height: 45%; border-radius: 100px; border: 1px black solid;">
             </div>
             <div class="brand-text-wrapper">
                 <span class="brand-title">COPPER <span class="amp">&</span> CROWN</span>
@@ -46,10 +46,22 @@
             <a href="#contact">Contact </a>
         </nav>
 
+<!-- Theme Toggle Button -->
+<button id="themeToggleBtn" onclick="toggleTheme()" style="
+  background: transparent;
+  color: var(--gold-primary);
+  padding: 4px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+">
+  <i id="themeIcon" class="fa-solid fa-sun"></i>
+  <span id="themeText">Light Mode</span>
+</button>
 
-   <button class="util-btn" onclick="openModal('trackingModal')">
-                <i class="fa-solid fa-location-crosshairs"></i> <span>Track Status</span>
-            </button>
 
         <div class="header-utility">
             <button class="util-btn req-account-btn" id="accountUtilBtn" onclick="openModal('accountModal')">
@@ -231,9 +243,15 @@
     <!-- Footer -->
     <footer class="footer-bar">
         <div class="footer-left"><span class="brand-title">COPPER <span class="amp">&</span> CROWN</span></div>
-        <div class="footer-center">
-            <a href="admin.html" style="color: var(--gold-primary); font-weight: 600;"><i class="fa-solid fa-user-shield"></i> Admin Portal</a>
-        </div>
+       <!-- Inside your navbar / user header area -->
+<div id="accountUtilBtn" class="user-account-container">
+  <span id="accountBtnText"></span>
+  
+  <!-- THIS BUTTON IS HIDDEN BY DEFAULT. IT ONLY APPEARS WHEN YOU LOG IN WITH YOUR ADMIN EMAIL -->
+  <a href="admin.html" id="adminPortalBtn" class="btn-gold-solid" style="display: none; margin-left: 10px; padding: 4px 10px; font-size: 0.8rem;">
+    ⚡ Admin Panel
+  </a>
+</div>
         <div class="footer-right">
             <span>0329-4942684</span> | <span>coppercrown.pk@gmail.com</span>
         </div>
