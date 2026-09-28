@@ -51,25 +51,39 @@ const ADMIN_CREDENTIALS = {
 };
 
 /* ==========================================================================
-   APP INITIALIZATION & AUTH STATE LISTENER
+   APP INITIALIZATION & AUTH STATE LISTENER (UPDATED)
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
     // Global Auth State Observer
     onAuthStateChanged(auth, (user) => {
+        const adminBtn = document.getElementById('adminPortalBtn');
+
         if (user) {
+            // Update the header greeting (e.g., "Hi, Muhammad Hassaan")
             updateUserHeaderUI(user.displayName || user.email.split('@')[0]);
+
+            // CHECK IF THE LOGGED-IN USER IS YOU (THE ADMIN)
+            if (user.email.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()) {
+                sessionStorage.setItem('adminAuthenticated', 'true');
+                if (adminBtn) adminBtn.style.display = 'inline-flex'; // SHOW Admin Button
+            } else {
+                sessionStorage.setItem('adminAuthenticated', 'false');
+                if (adminBtn) adminBtn.style.display = 'none'; // HIDE from regular users
+            }
         } else {
+            // User is logged out
             resetUserHeaderUI();
+            sessionStorage.setItem('adminAuthenticated', 'false');
+            if (adminBtn) adminBtn.style.display = 'none'; // HIDE from visitors
         }
     });
 
-    // Admin Session Guard
+    // Only protect admin.html if the user is actually on the admin page URL
     if (window.location.pathname.includes("admin.html")) {
         checkAdminSession();
     }
 });
-
 /* ==========================================================================
    USER AUTHENTICATION (SIGN UP & SIGN IN VIA FIREBASE v12)
    ========================================================================== */
@@ -329,26 +343,6 @@ window.toggleTheme = function() {
     html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
 };
 
-window.trackRequest = async function() {
-    const id = document.getElementById('trackingIdInput').value.trim();
-    const resultBox = document.getElementById('trackingResult');
-    
-    try {
-        const q = query(collection(db, "bookings"), where("requestID", "==", id));
-        const querySnapshot = await getDocs(q);
-
-        if (!querySnapshot.empty) {
-            const found = querySnapshot.docs[0].data();
-            document.getElementById('trackStatus').innerText = "Confirmed & Scheduled";
-            document.getElementById('trackService').innerText = found.service;
-            resultBox.style.display = 'block';
-        } else {
-            showToast("Request ID not found. Please check and try again.");
-        }
-    } catch (error) {
-        showToast("Tracking Error: " + error.message);
-    }
-};
 
 window.handleFormSubmit = function(e, msg) {
     e.preventDefault();
@@ -598,3 +592,33 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('mouseenter', () => UISounds.playHoverSound());
     });
 });
+// Theme Toggle Functionality
+window.toggleTheme = function() {
+  const isLight = document.body.classList.toggle('light-theme');
+  const themeText = document.getElementById('themeText');
+  const themeIcon = document.getElementById('themeIcon');
+
+  if (isLight) {
+    if (themeText) themeText.innerText = 'Dark Mode';
+    if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+    localStorage.setItem('preferredTheme', 'light');
+  } else {
+    if (themeText) themeText.innerText = 'Light Mode';
+    if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
+    localStorage.setItem('preferredTheme', 'dark');
+  }
+};
+
+// Auto-apply saved theme on page load
+(function applySavedTheme() {
+  const savedTheme = localStorage.getItem('preferredTheme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    window.addEventListener('DOMContentLoaded', () => {
+      const themeText = document.getElementById('themeText');
+      const themeIcon = document.getElementById('themeIcon');
+      if (themeText) themeText.innerText = 'Dark Mode';
+      if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+    });
+  }
+})();
