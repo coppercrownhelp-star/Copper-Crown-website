@@ -44,14 +44,11 @@ const db = getFirestore(app);
 // Target WhatsApp Business Phone Number
 const WHATSAPP_PHONE = "923294942684";
 
-// Master Admin Credentials
-const ADMIN_CREDENTIALS = {
-    email: "info.coppercrown.pk@gmail.com",
-    password: "Prisonerno804"
-};
+// Authorized Admin Email Address
+const ADMIN_EMAIL = "info.coppercrown.pk@gmail.com";
 
 /* ==========================================================================
-   APP INITIALIZATION & AUTH STATE LISTENER (UPDATED)
+   APP INITIALIZATION & AUTH STATE LISTENER
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -60,30 +57,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const adminBtn = document.getElementById('adminPortalBtn');
 
         if (user) {
-            // Update the header greeting (e.g., "Hi, Muhammad Hassaan")
+            // Update header greeting
             updateUserHeaderUI(user.displayName || user.email.split('@')[0]);
 
-            // CHECK IF THE LOGGED-IN USER IS YOU (THE ADMIN)
-            if (user.email.toLowerCase() === ADMIN_CREDENTIALS.email.toLowerCase()) {
+            // CHECK IF LOGGED-IN FIREBASE USER IS AUTHORIZED ADMIN
+            if (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                 sessionStorage.setItem('adminAuthenticated', 'true');
-                if (adminBtn) adminBtn.style.display = 'inline-flex'; // SHOW Admin Button
+                if (adminBtn) adminBtn.style.display = 'inline-flex';
             } else {
                 sessionStorage.setItem('adminAuthenticated', 'false');
-                if (adminBtn) adminBtn.style.display = 'none'; // HIDE from regular users
+                if (adminBtn) adminBtn.style.display = 'none';
             }
         } else {
             // User is logged out
             resetUserHeaderUI();
             sessionStorage.setItem('adminAuthenticated', 'false');
-            if (adminBtn) adminBtn.style.display = 'none'; // HIDE from visitors
+            if (adminBtn) adminBtn.style.display = 'none';
+        }
+
+        // Check page route protection whenever auth state updates
+        if (window.location.pathname.includes("admin.html")) {
+            checkAdminSession();
         }
     });
-
-    // Only protect admin.html if the user is actually on the admin page URL
-    if (window.location.pathname.includes("admin.html")) {
-        checkAdminSession();
-    }
 });
+
 /* ==========================================================================
    USER AUTHENTICATION (SIGN UP & SIGN IN VIA FIREBASE v12)
    ========================================================================== */
@@ -236,29 +234,39 @@ window.handleBookingSubmit = async function(event) {
 };
 
 /* ==========================================================================
-   STRICT ADMIN PORTAL LOGIC
+   SECURE ADMIN PORTAL LOGIC
    ========================================================================== */
 
-window.handleAdminLogin = function(event) {
+// Authenticate Admin via Firebase Auth Server
+window.handleAdminLogin = async function(event) {
     event.preventDefault();
     const email = document.getElementById('adminEmail').value.trim().toLowerCase();
     const password = document.getElementById('adminPassword').value;
 
-    if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+    if (email !== ADMIN_EMAIL.toLowerCase()) {
+        alert('Access Denied: This account is not authorized for Admin access.');
+        return;
+    }
+
+    try {
+        // Authenticate credentials securely against Firebase backend
+        await signInWithEmailAndPassword(auth, email, password);
         sessionStorage.setItem('adminAuthenticated', 'true');
         checkAdminSession();
         showToast('Admin Access Granted!');
-    } else {
-        alert('Access Denied: Invalid Master Admin Email or Password.');
+    } catch (error) {
+        alert(`Access Denied: ${error.message}`);
     }
 };
 
 function checkAdminSession() {
     const isAuth = sessionStorage.getItem('adminAuthenticated');
+    const currentUser = auth.currentUser;
     const authOverlay = document.getElementById('adminAuthOverlay');
     const dashContent = document.getElementById('adminDashboardContent');
 
-    if (isAuth === 'true') {
+    // Only allow access if Firebase user is logged in AND matched admin email
+    if (isAuth === 'true' && currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
         if (authOverlay) authOverlay.style.display = 'none';
         if (dashContent) dashContent.style.display = 'block';
         loadAdminDataRealtime();
@@ -268,8 +276,9 @@ function checkAdminSession() {
     }
 }
 
-window.logoutAdmin = function() {
+window.logoutAdmin = async function() {
     sessionStorage.removeItem('adminAuthenticated');
+    await signOut(auth);
     window.location.reload();
 };
 
@@ -291,15 +300,11 @@ function loadAdminDataRealtime() {
             tableBody.innerHTML = snapshot.docs.map(doc => {
                 const b = doc.data();
                 
-                // Clean the customer's phone number for the WhatsApp link (remove spaces, dashes, or leading zeros)
                 let customerPhone = (b.phone || '').replace(/[^0-9]/g, '');
-                
-                // Convert local Pakistani format (e.g., 0329...) to international format (92329...)
                 if (customerPhone.startsWith('0')) {
                     customerPhone = '92' + customerPhone.slice(1);
                 }
 
-                // Pre-filled message for the customer
                 const initialMsg = encodeURIComponent(`Hello ${b.name || 'Customer'}, regarding your Copper & Crown request (${b.requestID || ''}):`);
 
                 return `
@@ -320,6 +325,7 @@ function loadAdminDataRealtime() {
         console.error("Firestore Read Error: ", error);
     });
 }
+
 /* ==========================================================================
    UTILITY & MODAL CONTROLS
    ========================================================================== */
@@ -337,31 +343,22 @@ function showToast(msg) {
     }
 }
 
-window.toggleTheme = function() {
-    const html = document.documentElement;
-    const current = html.getAttribute('data-theme');
-    html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-};
-
-
 window.handleFormSubmit = function(e, msg) {
     e.preventDefault();
     showToast(msg);
     e.target.reset();
 };
+
 function toggleMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
-    navLinks.classList.toggle('active');
+    if (navLinks) navLinks.classList.toggle('active');
 }
+
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // ------------------------------------------
     // 1. Back to Top Button Logic
-    // ------------------------------------------
     const backToTopBtn = document.getElementById('backToTopBtn');
 
     if (backToTopBtn) {
-        // Toggle button visibility based on scroll distance
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
                 backToTopBtn.classList.add('show');
@@ -370,7 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Smooth scroll to top on click
         backToTopBtn.addEventListener('click', () => {
             window.scrollTo({
                 top: 0,
@@ -379,9 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ------------------------------------------
     // 2. Interactive Particles.js Configuration
-    // ------------------------------------------
     if (typeof particlesJS !== 'undefined' && document.getElementById('particles-js')) {
         particlesJS('particles-js', {
             "particles": {
@@ -393,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 },
                 "color": {
-                    "value": "#d4af37" // Royal Gold Particles
+                    "value": "#d4af37"
                 },
                 "shape": {
                     "type": "circle"
@@ -409,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "line_linked": {
                     "enable": true,
                     "distance": 140,
-                    "color": "#d4af37", // Gold Connecting Lines
+                    "color": "#d4af37",
                     "opacity": 0.2,
                     "width": 1
                 },
@@ -428,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "events": {
                     "onhover": {
                         "enable": true,
-                        "mode": "grab" // Interactive connection on mouse hover
+                        "mode": "grab"
                     },
                     "onclick": {
                         "enable": true,
@@ -448,20 +442,18 @@ document.addEventListener('DOMContentLoaded', () => {
             "retina_detect": true
         });
     }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const tiltCards = document.querySelectorAll('.service-box, .shine-card');
 
+    // 3. Card Tilt Effects
+    const tiltCards = document.querySelectorAll('.service-box, .shine-card');
     tiltCards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left; // Mouse X position inside card
-            const y = e.clientY - rect.top;  // Mouse Y position inside card
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
 
-            // Calculate tilt angle (-8deg to +8deg max)
             const rotateX = ((y - centerY) / centerY) * -8;
             const rotateY = ((x - centerX) / centerX) * 8;
 
@@ -469,64 +461,58 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.transition = 'transform 0.1s ease-out';
         });
 
-        // Reset transform when mouse leaves
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
             card.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
         });
     });
-});
-document.addEventListener('DOMContentLoaded', () => {
+
+    // 4. Custom Cursor Movement
     const dot = document.getElementById('cursorDot');
     const ring = document.getElementById('cursorRing');
 
-    if (!dot || !ring || window.innerWidth < 992) return;
+    if (dot && ring && window.innerWidth >= 992) {
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
 
-    let mouseX = 0, mouseY = 0;
-    let ringX = 0, ringY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
 
-    // Track mouse position
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+            dot.style.left = `${mouseX}px`;
+            dot.style.top = `${mouseY}px`;
+        });
 
-        // Position core dot immediately
-        dot.style.left = `${mouseX}px`;
-        dot.style.top = `${mouseY}px`;
-    });
+        function renderCursor() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
 
-    // Smooth inertia loop for outer ring
-    function renderCursor() {
-        // Interpolate position (0.15 controls lag smoothness)
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
+            ring.style.left = `${ringX}px`;
+            ring.style.top = `${ringY}px`;
 
-        ring.style.left = `${ringX}px`;
-        ring.style.top = `${ringY}px`;
+            requestAnimationFrame(renderCursor);
+        }
+        renderCursor();
 
-        requestAnimationFrame(renderCursor);
+        const targets = document.querySelectorAll('a, button, .service-box, .shine-card, .btn-gold-solid, .btn-gold-outline');
+        targets.forEach(target => {
+            target.addEventListener('mouseenter', () => {
+                ring.classList.add('hovered');
+                dot.classList.add('hovered');
+            });
+
+            target.addEventListener('mouseleave', () => {
+                ring.classList.remove('hovered');
+                dot.classList.remove('hovered');
+            });
+        });
     }
-    renderCursor();
-
-    // Expand cursor when hovering over interactive elements
-    const targets = document.querySelectorAll('a, button, .service-box, .shine-card, .btn-gold-solid, .btn-gold-outline');
-    targets.forEach(target => {
-        target.addEventListener('mouseenter', () => {
-            ring.classList.add('hovered');
-            dot.classList.add('hovered');
-        });
-
-        target.addEventListener('mouseleave', () => {
-            ring.classList.remove('hovered');
-            dot.classList.remove('hovered');
-        });
-    });
 });
+
 // Web Audio API UI Sound Synthesizer
 const UISounds = (() => {
     let audioCtx = null;
 
-    // Initialize AudioContext on first user interaction (browser policy compliance)
     function initContext() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -536,7 +522,6 @@ const UISounds = (() => {
         }
     }
 
-    // High-pitched subtle pop for button clicks
     function playClickSound() {
         initContext();
         if (!audioCtx) return;
@@ -545,11 +530,10 @@ const UISounds = (() => {
         const gain = audioCtx.createGain();
 
         osc.type = 'sine';
-        // Pitch drop from 800Hz to 200Hz creates a satisfying tactile "click"
         osc.frequency.setValueAtTime(800, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.04);
 
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime); // Soft volume
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
 
         osc.connect(gain);
@@ -559,7 +543,6 @@ const UISounds = (() => {
         osc.stop(audioCtx.currentTime + 0.04);
     }
 
-    // Soft tone for hover states
     function playHoverSound() {
         initContext();
         if (!audioCtx) return;
@@ -570,7 +553,7 @@ const UISounds = (() => {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(440, audioCtx.currentTime);
 
-        gain.gain.setValueAtTime(0.02, audioCtx.currentTime); // Very faint
+        gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
 
         osc.connect(gain);
@@ -583,7 +566,6 @@ const UISounds = (() => {
     return { playClickSound, playHoverSound };
 })();
 
-// Attach sounds to all buttons and interactive elements
 document.addEventListener('DOMContentLoaded', () => {
     const interactiveElements = document.querySelectorAll('button, .btn-gold-solid, .btn-gold-outline, .nav-link');
 
@@ -592,33 +574,34 @@ document.addEventListener('DOMContentLoaded', () => {
         el.addEventListener('mouseenter', () => UISounds.playHoverSound());
     });
 });
+
 // Theme Toggle Functionality
 window.toggleTheme = function() {
-  const isLight = document.body.classList.toggle('light-theme');
-  const themeText = document.getElementById('themeText');
-  const themeIcon = document.getElementById('themeIcon');
+    const isLight = document.body.classList.toggle('light-theme');
+    const themeText = document.getElementById('themeText');
+    const themeIcon = document.getElementById('themeIcon');
 
-  if (isLight) {
-    if (themeText) themeText.innerText = 'Dark Mode';
-    if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
-    localStorage.setItem('preferredTheme', 'light');
-  } else {
-    if (themeText) themeText.innerText = 'Light Mode';
-    if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
-    localStorage.setItem('preferredTheme', 'dark');
-  }
+    if (isLight) {
+        if (themeText) themeText.innerText = 'Dark Mode';
+        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+        localStorage.setItem('preferredTheme', 'light');
+    } else {
+        if (themeText) themeText.innerText = 'Light Mode';
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
+        localStorage.setItem('preferredTheme', 'dark');
+    }
 };
 
 // Auto-apply saved theme on page load
 (function applySavedTheme() {
-  const savedTheme = localStorage.getItem('preferredTheme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-theme');
-    window.addEventListener('DOMContentLoaded', () => {
-      const themeText = document.getElementById('themeText');
-      const themeIcon = document.getElementById('themeIcon');
-      if (themeText) themeText.innerText = 'Dark Mode';
-      if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
-    });
-  }
+    const savedTheme = localStorage.getItem('preferredTheme');
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        window.addEventListener('DOMContentLoaded', () => {
+            const themeText = document.getElementById('themeText');
+            const themeIcon = document.getElementById('themeIcon');
+            if (themeText) themeText.innerText = 'Dark Mode';
+            if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+        });
+    }
 })();
